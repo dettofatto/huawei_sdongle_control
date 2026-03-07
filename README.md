@@ -252,3 +252,17 @@ The SDongle communicates on TCP port 6606 using a proprietary Modbus-based proto
 ## License
 
 MIT — do whatever you want, no warranty.
+
+## Tested setup
+
+- SDongle: A-05
+- Firmware: V200R022C10SPC300
+- Topology: 2 Huawei inverters behind one SDongle
+- HA host: Home Assistant OS / Supervised / Container (specify)
+- Access path: direct Wi-Fi or LAN NAT via Raspberry Pi
+
+## Security note
+
+Do not expose TCP 6606 or 502 to the internet.
+Keep the SDongle on an isolated network.
+Use LAN-only forwarding from a trusted host.
