@@ -1,7 +1,7 @@
 import socket, time, hashlib, hmac, struct, secrets, sys
 
 HOST = '192.168.200.1'
-PASSWORD = 'Changeme1'
+PASSWORD = 'changeme'
 
 hmac_sha256 = lambda k, d: hmac.new(hashlib.sha256(k.encode()).digest(), d, hashlib.sha256).digest()
 
