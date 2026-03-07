@@ -4,14 +4,14 @@ Huawei SDongle - Imposta limite potenza
 Uso: python3 set_limit.py <watt>      -> imposta limite
      python3 set_limit.py status      -> legge stato attuale (JSON)
 Esempio: python3 set_limit.py 15000
-Range: 5000-18500W
+Range: 5000-18500W (you can change)
 """
 
 import socket, time, hashlib, hmac, struct, secrets, sys, json
 
-HOST     = '192.168.1.172'  # IP Raspberry (o dongle diretto)
+HOST     = 'ip.dongle'  # IP Raspberry (o dongle diretto)
 PORT     = 6606
-PASSWORD = 'Changeme1'
+PASSWORD = 'Changeme'
 MIN_W    = 5000
 MAX_W    = 18500
 
