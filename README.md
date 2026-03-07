@@ -93,7 +93,7 @@ nft add rule ip nat postrouting oifname wlan0 masquerade
 
 ## Installation
 
-1. Copy `set_limit.py` to `/config/scripts/set_limit.py` on your Home Assistant instance
+1. Copy `set_limit.py` to `/config/scripts/set_limit.py` and get_limit.py on your Home Assistant instance
 2. Edit the top of the script with your settings:
 
 ```python
@@ -110,15 +110,12 @@ shell_command:
 command_line:
   - sensor:
       name: "Sdongle Stato"
-      command: "python3 /config/scripts/set_limit.py status"
-      scan_interval: 30
+      command: "python3 /config/scripts/get_limit.py"
+      scan_interval: 300
       value_template: "{{ value_json.power_limit_w }}"
       unit_of_measurement: "W"
       json_attributes:
-        - mode_name
         - mode
-        - status
-        - error
 
 input_number:
   solar_power_limit:
@@ -160,7 +157,7 @@ max_exceeded: silent
 python3 set_limit.py 15000
 
 # Read current status
-python3 set_limit.py status
+python3 get_limit.py
 ```
 
 ### JSON output examples:
