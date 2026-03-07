@@ -1,7 +1,7 @@
 import socket, time, hashlib, hmac, struct, secrets, sys
 
 HOST = '192.168.200.1'
-PASSWORD = 'Changeme1'
+PASSWORD = 'changeme'
 
 if len(sys.argv) < 2 or not sys.argv[1].isdigit():
     print('Uso: python3 set_limit.py <watt>')
