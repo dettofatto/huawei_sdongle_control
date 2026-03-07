@@ -98,10 +98,7 @@ nft add rule ip nat postrouting oifname wlan0 masquerade
 
 ```python
 HOST     = 'ip.sdongle'  # Or Raspberry Pi LAN IP; or box, or another wifi connected directly to sdongle
-PORT     = 6606
-PASSWORD = 'Changeme'      # SDongle installer password
-MIN_W    = 5000
-MAX_W    = 18500
+PASSWORD = 'changeme'      # SDongle installer password
 ```
 
 3. Add to `configuration.yaml`:
