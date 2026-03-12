@@ -19,13 +19,8 @@ If you are here, you know the issue. simply read and write on the sdongle.
 Controls and read the **total export power limit** of a Huawei solar installation locally, without cloud, acting directly on the SDongle A-05 gateway — not on individual inverters.
 
 - ✅ Acts on **combined total output** — SDongle distributes the limit across all inverters automatically
-- ✅ Works with **any number of inverters** (master + slaves) on the same SDongle
 - ✅ Set power limit from **5000W to 18500W** (adjustable to your installation)
-- ✅ Read current status (mode, limit) as **JSON**
-- ✅ Works **offline** — no Huawei cloud required
-- ✅ After we can Integrates with **Home Assistant** via `shell_command` + `command_line` sensor
-- ✅ **30-second polling** for real-time status
-- ✅ Pairs with a **grid voltage sensor** to prevent inverter shutdown at 253V
+- ✅ Read current status of inverter Master, Slave and Battery 
 
 ---
 
@@ -34,8 +29,7 @@ Controls and read the **total export power limit** of a Huawei solar installatio
 
 - Huawei SDongle A-05 (tested on firmware `V200R022C10SPC300`)
 - or connected directly to sdongle ap (not via your lan)
-- Raspberry Pi (or any Linux box) connected to SDongle WiFi (`SDongleA-HVxxxxxxxxxx`)
-- NAT/port-forward from LAN → SDongle:
+- or Raspberry Pi (or any Linux box) connected to SDongle WiFi (`SDongleA-HVxxxxxxxxxx`) with NAT/port-forward from LAN → SDongle:
 
 ```bash
 # Run once on Raspberry Pi (persists after reboot)
@@ -76,15 +70,6 @@ python3 dongle_read.py
 ```
 
 
-## Control Modes
-
-| Value | Name | Description |
-|-------|------|-------------|
-| `0` | Unlimited | No export limit |
-| `1` | Fixed | Fixed per-inverter static limit — does **not** work for combined total |
-| `6` | Active Scheduling | Dynamic total limit via SDongle — used by this script |
-
-> **Note:** Mode `6` (Active Scheduling) is the only mode that allows controlling the **combined total** export. Mode `1` (Fixed) applies independently to each inverter and cannot accept a combined total value. This script writes `0xB937 = 6` as an unlock step before writing the limit to `0xB938`.
 
 ---
 
