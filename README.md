@@ -11,70 +11,29 @@
 
 ## Why this exists — the real problem
 
-In Huawei solar installations with **multiple inverters** (master + one or more slaves), each inverter only knows its own output. If you want to limit the **total power exported to the grid**, you cannot simply tell each inverter "limit to X watts"
-
-The **SDongle A-05** is the gateway that sits above all inverters and manages the entire installation. This script talks **directly to the SDongle**,via his AP, which then distributes the curtailment across all connected inverters automatically. This is the only way to correctly limit total grid export in a multi-inverter setup.
-
-### Why grid voltage matters — and why inverters shut down
-
-In many grids (especially in Italy under CEI 0-21 / EN 50549), when solar production is high and local consumption is low, excess energy pushed to the grid causes the **grid voltage to rise**. When voltage exceeds **253V**, inverters are required by law to disconnect and shut down.
-
-This creates a painful cycle: inverter shuts down → restarts → shuts down again — stressing the hardware and losing production.
-
-**The solution:** monitor grid voltage in Home Assistant with any compatible energy meter (Shelly EM, Eastron SDM, etc.) and **proactively reduce the export limit** before the inverter hits 253V. This script enables exactly that workflow.
-
+If you are here, you know the issue. simply read and write on the sdongle.
 ---
 
 ## What it does
 
-Controls the **total export power limit** of a Huawei solar installation locally, without cloud, acting directly on the SDongle A-05 gateway — not on individual inverters.
+Controls and read the **total export power limit** of a Huawei solar installation locally, without cloud, acting directly on the SDongle A-05 gateway — not on individual inverters.
 
 - ✅ Acts on **combined total output** — SDongle distributes the limit across all inverters automatically
 - ✅ Works with **any number of inverters** (master + slaves) on the same SDongle
 - ✅ Set power limit from **5000W to 18500W** (adjustable to your installation)
 - ✅ Read current status (mode, limit) as **JSON**
 - ✅ Works **offline** — no Huawei cloud required
-- ✅ Integrates with **Home Assistant** via `shell_command` + `command_line` sensor
+- ✅ After we can Integrates with **Home Assistant** via `shell_command` + `command_line` sensor
 - ✅ **30-second polling** for real-time status
 - ✅ Pairs with a **grid voltage sensor** to prevent inverter shutdown at 253V
 
 ---
 
-## Recommended: voltage-based automation
-
-```yaml
-alias: "Sdongle - Riduci potenza se tensione alta"
-trigger:
-  - platform: numeric_state
-    entity_id: sensor.grid_voltage   # <-- your voltage sensor
-    above: 252
-actions:
-  - service: input_number.set_value
-    target:
-      entity_id: input_number.solar_power_limit
-    data:
-      value: 10000  # reduce to 10kW
-
----
-
-alias: "Sdongle - Ripristina potenza se tensione ok"
-trigger:
-  - platform: numeric_state
-    entity_id: sensor.grid_voltage
-    below: 249
-actions:
-  - service: input_number.set_value
-    target:
-      entity_id: input_number.solar_power_limit
-    data:
-      value: 18500  # restore maximum
-```
-
----
 
 ## Requirements
 
 - Huawei SDongle A-05 (tested on firmware `V200R022C10SPC300`)
+- or connected directly to sdongle ap (not via your lan)
 - Raspberry Pi (or any Linux box) connected to SDongle WiFi (`SDongleA-HVxxxxxxxxxx`)
 - NAT/port-forward from LAN → SDongle:
 
@@ -91,63 +50,14 @@ nft add rule ip nat postrouting oifname wlan0 masquerade
 
 ---
 
-## Installation
+## Installation (I've removed ha configuration for now)
 
-1. Copy `set_limit.py` to `/config/scripts/set_limit.py` and get_limit.py on your Home Assistant instance
-2. Edit the top of the script with your settings:
+1. Copy my script in your directory 
 
 ```python
 HOST     = 'ip.sdongle'  # Or Raspberry Pi LAN IP; or box, or another wifi connected directly to sdongle
 PASSWORD = 'changeme'      # SDongle installer password
 ```
-
-3. Add to `configuration.yaml`:
-
-```yaml
-shell_command:
-  set_solar_limit: "python3 /config/scripts/set_limit.py {{ watts | int }}"
-
-command_line:
-  - sensor:
-      name: "Sdongle Stato"
-      command: "python3 /config/scripts/get_limit.py"
-      scan_interval: 300
-      value_template: "{{ value_json.power_limit_w }}"
-      unit_of_measurement: "W"
-      json_attributes:
-        - mode
-
-input_number:
-  solar_power_limit:
-    name: "Limite Potenza Solare"
-    min: 5000
-    max: 18500
-    step: 500
-    unit_of_measurement: W
-    icon: mdi:solar-power
-    mode: slider
-```
-
-4. Add the automation (via UI → YAML mode):
-
-```yaml
-alias: Sdongle - Imposta limite potenza
-description: Invia il limite al dongle quando input_number cambia
-triggers:
-  - trigger: state
-    entity_id: input_number.solar_power_limit
-conditions: []
-actions:
-  - action: shell_command.set_solar_limit
-    data:
-      watts: "{{ states('input_number.solar_power_limit') | int }}"
-mode: single
-max_exceeded: silent
-```
-
-5. Restart Home Assistant
-
----
 
 ## Usage
 
@@ -158,26 +68,13 @@ python3 set_limit.py 15000
 
 # Read current status
 python3 get_limit.py
+
+# Read all data, you must repeat, the dongle is very slow
+python3 dongle_read.py
+
+
 ```
 
-### JSON output examples:
-
-**Status:**
-```json
-{"status": "ok", "power_limit_w": 18000, "mode": 6, "mode_name": "Active Scheduling"}
-```
-
-**Set limit:**
-```json
-{"status": "ok", "power_limit_w": 15000, "power_limit_previous_w": 18000, "mode": 6, "mode_name": "Active Scheduling"}
-```
-
-**Error:**
-```json
-{"status": "error", "error": "Login failed"}
-```
-
----
 
 ## Control Modes
 
@@ -206,31 +103,6 @@ The SDongle communicates on TCP port 6606 using a proprietary Modbus-based proto
 
 ---
 
-## Automation example — time-based limit
-
-```yaml
-- alias: "Limit export at noon"
-  trigger:
-    - platform: time
-      at: "12:00:00"
-  action:
-    - service: input_number.set_value
-      target:
-        entity_id: input_number.solar_power_limit
-      data:
-        value: 15000
-
-- alias: "Full power after 3pm"
-  trigger:
-    - platform: time
-      at: "15:00:00"
-  action:
-    - service: input_number.set_value
-      target:
-        entity_id: input_number.solar_power_limit
-      data:
-        value: 18500
-```
 
 ---
 
