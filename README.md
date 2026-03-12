@@ -9,7 +9,7 @@
 
 ---
 
-## If you are here, you know the issue. simply read and write on the sdongle.
+## If you are here, you know the issue. Simply read and write on the sdongle.
 ---
 
 ## What it does
