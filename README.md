@@ -1,7 +1,7 @@
 # Huawei SDongle - Local Power Limit Control for Home Assistant
 
 > **Reverse engineered by a surgeon, not a developer.**  
-> Protocol discovered via Android pcap capture (PCAPdroid) and Modbus analysis with AI assistance.
+> Protocol discovered via Android pcap capture (PCAPdroid) and Modbus analysis with AI assistance. Use AP dongle directly and port 6606
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.x-blue)
@@ -11,9 +11,9 @@
 
 ## Why this exists — the real problem
 
-In Huawei solar installations with **multiple inverters** (master + one or more slaves), each inverter only knows its own output. If you want to limit the **total power exported to the grid**, you cannot simply tell each inverter "limit to X watts" — the individual inverter registers only accept a per-unit limit, not a combined total. They don't coordinate with each other.
+In Huawei solar installations with **multiple inverters** (master + one or more slaves), each inverter only knows its own output. If you want to limit the **total power exported to the grid**, you cannot simply tell each inverter "limit to X watts"
 
-The **SDongle A-05** is the gateway that sits above all inverters and manages the entire installation. This script talks **directly to the SDongle**, which then distributes the curtailment across all connected inverters automatically. This is the only way to correctly limit total grid export in a multi-inverter setup.
+The **SDongle A-05** is the gateway that sits above all inverters and manages the entire installation. This script talks **directly to the SDongle**,via his AP, which then distributes the curtailment across all connected inverters automatically. This is the only way to correctly limit total grid export in a multi-inverter setup.
 
 ### Why grid voltage matters — and why inverters shut down
 
