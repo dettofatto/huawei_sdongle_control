@@ -66,9 +66,63 @@ python3 dongle_read.py
 
 
 ```
+Example of results of python3 dongle_read.py:
+
+```
+python3 dongle_read.py         
+REGISTRO                         |       VALORE | NOTE
+=================================================================
+
+=== DONGLE / SISTEMA ===
+Inverter Connessi                |      TIMEOUT | addr=40098 sid=1
+Potenza Totale Sistema (W)       |      ERR_LEN | raw=001200000003018302
+Energia Totale Sistema (kWh)     |      TIMEOUT | addr=40093 sid=1
+Stato Cloud                      |         28.0 | 0=offline 1=online
+
+=== INVERTER MASTER (ID 1) ===
+Stato Funzionamento              |      TIMEOUT | addr=32089 sid=1
+Codice Allarme 1                 |          0.0 | bitmask
+Codice Allarme 2                 |          0.0 | bitmask
+Temp. Interna (C)                |         45.6 |
+Potenza Attiva (W)               |       2508.0 | signed
+Potenza Reattiva (VAR)           |          1.0 | signed
+Potenza Apparente (VA)           |   65540996.0 |
+Power Factor                     |         10.0 | signed
+Frequenza Uscita (Hz)            |        49.96 |
+Energia Giorno (kWh)             |        14.67 |
+Energia Totale (kWh)             |     23020.92 |
+
+=== STRINGHE PV ===
+PV1 Tensione (V)                 |        476.8 |
+PV1 Corrente (A)                 |         2.81 |
+PV2 Tensione (V)                 |        449.3 |
+PV2 Corrente (A)                 |         2.87 |
+PV3 Tensione (V)                 |          0.0 | se presente
+PV3 Corrente (A)                 |          0.0 | se presente
+
+=== LATO AC / GRID ===
+Tensione Fase A (V)              |        242.8 |
+Tensione Fase B (V)              |        239.7 |
+Tensione Fase C (V)              |        241.3 |
+Corrente Fase A (A)              |          0.0 | signed
+Corrente Fase B (A)              |      TIMEOUT | addr=32073 sid=1
+Corrente Fase C (A)              |          0.0 | signed
+
+=== BATTERIA (ID 1) ===
+Tipo Batteria                    |          2.0 | 0=nessuna 1=LiIon
+PV3 Corrente (A)            11:57 [20/290]  0.0 | se presente                       === LATO AC / GRID ===
+Tensione Fase A (V)              |        242.8 |
+Tensione Fase B (V)              |        239.7 |
+Tensione Fase C (V)              |        241.3 |
+Corrente Fase A (A)              |          0.0 | signed
+Corrente Fase B (A)              |      TIMEOUT | addr=32073 sid=1
+Corrente Fase C (A)              |          0.0 | signed
+=== BATTERIA (ID 1) ===
+Tipo Batteria                    |          2.0 | 0=nessuna 1=LiIon
+Stato Batteria                   |      E$1:[tmux]*                  Thu 03-12 11:57
 
 
-
+```
 ---
 
 ## Protocol Notes
