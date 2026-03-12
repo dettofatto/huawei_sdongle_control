@@ -9,9 +9,7 @@
 
 ---
 
-## Why this exists — the real problem
-
-If you are here, you know the issue. simply read and write on the sdongle.
+## If you are here, you know the issue. simply read and write on the sdongle.
 ---
 
 ## What it does
