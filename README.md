@@ -1,7 +1,7 @@
-# Huawei SDongle - Local Power Limit Control for Home Assistant
+# Huawei SDongle - Local Power Limit Control via 6606 port
 
 > **Reverse engineered by a surgeon, not a developer.**  
-> Protocol discovered via Android pcap capture (PCAPdroid) and Modbus analysis with AI assistance. Use AP dongle directly and port 6606
+> Protocol discovered via Android pcap capture (PCAPdroid) and Modbus analysis with AI assistance. Use AP dongle wifi directly and port 6606
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.x-blue)
@@ -14,7 +14,7 @@
 
 ## What it does
 
-Controls and read the **total export power limit** of a Huawei solar installation locally, without cloud, acting directly on the SDongle A-05 gateway — not on individual inverters.
+Controls and read the **total export power limit** of a Huawei solar installation locally, without cloud, acting directly on the SDongle A-05 wifi gateway (his AP) — not on individual inverters.
 
 - ✅ Acts on **combined total output** — SDongle distributes the limit across all inverters automatically
 - ✅ Set power limit from **5000W to 18500W** (adjustable to your installation)
