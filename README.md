@@ -145,7 +145,7 @@ The SDongle communicates on TCP port 6606 using a proprietary Modbus-based proto
 
 ## Credits & References
 
-- **PCAPdroid** by emanuele-f — Android network capture without root  
+- **PCAPdroid** by emanuele-f — Android network capture with root  
   https://github.com/emanuele-f/PCAPdroid
 - **huawei-sun2000-modbus** by wlcrs — Huawei inverter Modbus register map  
   https://github.com/wlcrs/huawei-sun2000-modbus
